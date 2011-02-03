@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<project name="Haskell drafts" default="build" basedir=".">
+  <description>Some haskell drafts for .NET platform</description>
+  <property name="debug" value="true" overwrite="false" />
+  <property name="force" value="false" overwrite="false" />
+
+  <target name="clean" description="cleans the tree">
+    <delete file="bin/Language.Haskell.TH.Syntax.dll" failonerror="false" />
+    <delete file="bin/Language.Haskell.TH.Syntax.pdb" failonerror="false" />
+    <delete file="bin/Language.Haskell.TH.Syntax.dll.mdb" failonerror="false" />
+
+    <delete file="bin/Language.Haskell.Internal.dll" failonerror="false" />
+    <delete file="bin/Language.Haskell.Internal.pdb" failonerror="false" />
+    <delete file="bin/Language.Haskell.Internal.dll.mdb" failonerror="false" />
+  </target>
+
+  <target name="lang-haskell-internal" description="compiles Language.Haskell.Internal module">
+    <csc target="library" output="bin/Language.Haskell.Internal.dll" debug="${debug}">
+      <sources>
+        <include name="src/AssemblyInfo.cs" />
+      </sources>
+    </csc>
+  </target>
+
+  <target name="lang-haskell-th-syntax" depends="lang-haskell-internal" description="compiles Language.Haskell.TH.Syntax module">
+    <csc target="library" output="bin/Language.Haskell.TH.Syntax.dll" debug="${debug}">
+      <sources>
+        <include name="src/th/AssemblyInfo.cs" />
+      </sources>
+    </csc>
+  </target>
+
+  <target name="build" depends="lang-haskell-th-syntax" description="compiles the source code">
+  </target>
+</project>
