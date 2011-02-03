@@ -9,24 +9,29 @@
     <delete file="bin/Language.Haskell.TH.Syntax.pdb" failonerror="false" />
     <delete file="bin/Language.Haskell.TH.Syntax.dll.mdb" failonerror="false" />
 
-    <delete file="bin/Language.Haskell.Internal.dll" failonerror="false" />
-    <delete file="bin/Language.Haskell.Internal.pdb" failonerror="false" />
-    <delete file="bin/Language.Haskell.Internal.dll.mdb" failonerror="false" />
+    <delete file="bin/Language.Haskell.Runtime.dll" failonerror="false" />
+    <delete file="bin/Language.Haskell.Runtime.pdb" failonerror="false" />
+    <delete file="bin/Language.Haskell.Runtime.dll.mdb" failonerror="false" />
   </target>
 
-  <target name="lang-haskell-internal" description="compiles Language.Haskell.Internal module">
-    <csc target="library" output="bin/Language.Haskell.Internal.dll" debug="${debug}">
+  <target name="lang-haskell-runtime" description="compiles Language.Haskell.Runtime module">
+    <csc target="library" output="bin/Language.Haskell.Runtime.dll" debug="${debug}">
       <sources>
         <include name="src/AssemblyInfo.cs" />
+        <include name="src/Attributes.cs" />
       </sources>
     </csc>
   </target>
 
-  <target name="lang-haskell-th-syntax" depends="lang-haskell-internal" description="compiles Language.Haskell.TH.Syntax module">
+  <target name="lang-haskell-th-syntax" depends="lang-haskell-runtime" description="compiles Language.Haskell.TH.Syntax module">
     <csc target="library" output="bin/Language.Haskell.TH.Syntax.dll" debug="${debug}">
       <sources>
         <include name="src/th/AssemblyInfo.cs" />
+        <include name="src/th/Data.cs" />
       </sources>
+      <references>
+        <include name="bin/Language.Haskell.Runtime.dll"/>
+      </references>
     </csc>
   </target>
 
