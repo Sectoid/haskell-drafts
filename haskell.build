@@ -19,6 +19,7 @@
       <sources>
         <include name="src/AssemblyInfo.cs" />
         <include name="src/Attributes.cs" />
+        <include name="src/Prelude.cs" />
       </sources>
     </csc>
   </target>

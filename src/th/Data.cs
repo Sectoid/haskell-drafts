@@ -1,5 +1,4 @@
-using System;
-
+using Prelude;
 using Language.Haskell.Runtime;
 
 namespace Language.Haskell.TH.Syntax
@@ -79,7 +78,7 @@ public class NameG : NameFlavour
 public class ModName 
 {
     public String String;
-    public ModName(string name)
+    public ModName(String name)
     {
       String = name;
     }
@@ -103,7 +102,7 @@ public class PkgName
 public class OccName 
 {
     public String String;
-    public OccName(string name)
+    public OccName(String name)
     {
       String = name;
     }
@@ -127,5 +126,141 @@ public class DataName : NameSpace {}
 // 				-- in the same name space for now.
 [ADTCtor]
 public class TcClsName : NameSpace {}
+
+// // data Dec
+// [ADT]
+// public abstract class Dec {}
+
+// // FunD Name [Clause]  -- { f p1 p2 = b where decs }
+// [ADTCtor]
+// public class FunD : Dec
+// {
+//     public Name Name;
+//     public List<Clause> Clauses;
+//     public FunD(Name name, List<Clause> clauses)
+//     {
+//       Name = name;
+//       Clauses = clauses;
+//     }
+// }
+
+// // ValD Pat Body [Dec]	{ p = b where decs }
+// [ADTCtor]
+// public class ValD : Dec
+// {
+//     public Pat Pat;
+//     public Body Body;
+//     public List<Dec> Decs;
+    
+//     public ValD(Pat pat,
+// 		Body body,
+// 		List<Dec> decs)
+//     {
+//       Pat = pat;
+//       Body = body;
+//       Decs = decs;
+//     }
+// }
+
+// // DataD Cxt Name [TyVarBndr] [Con] [Name]     { data Cxt x => T x = A x | B (T x)  deriving (Z,W)}
+// [ADTCtor]
+// public class DataD : Dec
+// {
+//     public Cxt Ctx;
+//     public Name Name;
+//     public List<TyVarBndr> TyVarBndrs;
+//     public List<Con> Cons;
+//     public List<Name> Names;
+
+//     public DataD(Cxt ctx,
+// 		 Name name,
+// 		 List<TyVarBndr> tyVarBndrs,
+// 		 List<Con> cons,
+// 		 List<Name> names)
+//     {
+//       Ctx = ctx;
+//       Name = name;
+//       TyVarBndrs = tyVarBndrs;
+//       Cons = cons;
+//       Names = names;
+//     }
+// }
+
+// // NewtypeD Cxt Name [TyVarBndr] Con [Name]	{ newtype Cxt x => T x = A (B x)       deriving (Z,W)}
+// [ADTCtor]
+// public class NewtypeD : Dec
+// {
+//     public Cxt Ctx;
+//     public Name Name;
+//     public List<TyVarBndr> TyVarBndrs;
+//     public Con Con;
+//     public List<Name> Names;
+
+//     public NewtypeD(Cxt ctx,
+// 		    Name name,
+// 		    List<TyVarBndr> tyVarBndrs,
+// 		    Con con,
+// 		    List<Name> names)
+//     {
+//       Ctx = ctx;
+//       Name = name;
+//       TyVarBndrs = tyVarBndrs;
+//       Con = con;
+//       Names = names;
+//     }
+// }
+
+// // TySynD Name [TyVarBndr] Type	{ type T x = (x,x) }
+// [ADTCtor]
+// public class TySynD : Dec
+// {
+//     public Name Name;
+//     public List<TyVarBndr> TyVarBndrs;
+//     public Type Type;
+
+//     public TySynD(Name name,
+// 		  List<TyVarBndr> tyVarBndrs,
+// 		  Type type)
+//     {
+//       Name = name;
+//       TyVarBndrs = tyVarBndrs;
+//       Type = type;
+//     }
+// }
+
+// // ClassD Cxt Name [TyVarBndr] [FunDep] [Dec]	{ class Eq a => Ord a where ds }
+// [ADTCtor]
+// public class ClassD : Dec
+// {
+//     public Ctx Ctx;
+//     public Name Name;
+//     public List<TyVarBndr> TyVarBndrs;
+//     public List<FunDep> FunDeps;
+//     public List<Dec> Decs;
+
+//     public ClassD(Ctx ctx,
+// 		  Name name,
+// 		  List<TyVarBndr> tyVarBndrs,
+// 		  List<FunDep> funDeps,
+// 		  List<Dec> decs)
+//     {
+//       Ctx = ctx;
+//       Name = name;
+//       TyVarBndrs = tyVarBndrs;
+//       FunDeps = funDeps;
+//       Decs = decs;
+//     }
+// }
+
+// // // InstanceD Cxt Type [Dec]	{ instance Show w => Show [w]       where ds }
+// // [ADTCtor]
+// // public class InstanceD
+
+
+
+
+// TODO
+[ADT]
+public abstract class Clause {}
 
 }
