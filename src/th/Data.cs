@@ -562,6 +562,27 @@ public class KindedTV : TyVarBndr
 
 #endregion
 
+#region data Kind
+
+// data Kind
+[ADT]
+public abstract class Kind {}
+
+// StarK -- *
+[ADTCtor]
+public class StarK : Kind {}
+
+// ArrowK Kind Kind  -- k1 -> k2
+[ADTCtor]
+public class ArrowK : Kind
+{
+    public System.Tuple<Kind, Kind> Items;
+    public ArrowK(Kind v1, Kind v2)
+    { Items = System.Tuple.Create(v1, v2); }
+}
+
+#endregion
+
 // TODO
 [ADT]
 public abstract class Clause {}
@@ -588,8 +609,6 @@ public abstract class Pragma {}
 [ADT]
 public abstract class FamFlavour {}
 
-[ADT]
-public abstract class Kind {}
 
 [ADT]
 public abstract class Lit {}
