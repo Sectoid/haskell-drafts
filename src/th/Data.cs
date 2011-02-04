@@ -623,9 +623,21 @@ public class Match
 
 #endregion
 
-// TODO
+#region data Clause
+
+// Clause [Pat] Body [Dec]	f { p1 p2 = body where decs }
 [ADT]
-public abstract class Clause {}
+[ADTCtor]
+public class Clause 
+{
+    public System.Tuple<List<Pat>, Body, List<Dec>> Items;
+    public Clause(List<Pat> v1, Body v2, List<Dec> v3)
+    { Items = System.Tuple.Create(v1, v2, v3); }
+}
+
+#endregion
+
+// TODO
 
 [ADT]
 public abstract class Pat {}
