@@ -11,14 +11,10 @@ namespace Prelude
 [ADTCtor]
 public class List<T> 
 {
-    public T Head;
-    public List<T> Tail;
+    public Tuple<T, List<T>> Items;
     
-    public List(T head, List<T> tail)
-    {
-      Head = head;
-      Tail = tail;
-    }
+    public List(T v1, List<T> v2)
+    { Items = System.Tuple.Create(v1, v2); }
 
     protected List() {} // FIXME: Hack
 }
