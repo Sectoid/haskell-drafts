@@ -637,17 +637,40 @@ public class Clause
 
 #endregion
 
+#region data Body
+
+// data Body
+[ADT]
+public abstract class Body {}
+
+
+// GuardedB [(Guard, Exp)]	-- f p { | e1 = e2 | e3 = e4 } where ds
+[ADTCtor]
+public class GuardedB : Body
+{
+    public System.Tuple<List<System.Tuple<Guard, Exp>>> Items;
+    public GuardedB(List<System.Tuple<Guard, Exp>> v1)
+    { Items = System.Tuple.Create(v1); }
+}
+
+// NormalB Exp -- f p { = e } where ds
+[ADTCtor]
+public class NormalB : Body
+{
+    public System.Tuple<Exp> Items;
+    public NormalB(Exp v1)
+    { Items = System.Tuple.Create(v1); }
+}
+
+#endregion
+
 // TODO
 
 [ADT]
 public abstract class Pat {}
 
 [ADT]
-public abstract class Body {}
-
-[ADT]
 public abstract class Cxt {}
-
 
 [ADT]
 public abstract class FunDep {}
@@ -660,7 +683,6 @@ public abstract class Pragma {}
 
 [ADT]
 public abstract class FamFlavour {}
-
 
 [ADT]
 public abstract class Lit {}
@@ -679,5 +701,8 @@ public abstract class StrictType {}
 
 [ADT]
 public abstract class VarStrictType {}
+
+[ADT]
+public abstract class Guard {}
 
 }
