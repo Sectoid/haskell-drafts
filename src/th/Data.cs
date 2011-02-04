@@ -609,6 +609,20 @@ public class EqualP : Pred
 
 #endregion
 
+#region data Match
+
+// Match Pat Body [Dec] -- case e of { pat -> body where decs }
+[ADT]
+[ADTCtor]
+public class Match
+{
+    public System.Tuple<Pat, Body, List<Dec>> Items;
+    public Match(Pat v1, Body v2, List<Dec> v3)
+    { Items = System.Tuple.Create(v1, v2, v3); }
+}
+
+#endregion
+
 // TODO
 [ADT]
 public abstract class Clause {}
@@ -638,9 +652,6 @@ public abstract class FamFlavour {}
 
 [ADT]
 public abstract class Lit {}
-
-[ADT]
-public abstract class Match {}
 
 [ADT]
 public abstract class Stmt {}
