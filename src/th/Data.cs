@@ -536,6 +536,32 @@ public class SigT : Type
 
 #endregion
 
+#region data TyVarBndr
+
+// data TyVarBndr
+[ADT]
+public abstract class TyVarBndr {}
+
+// PlainTV Name -- a
+[ADTCtor]
+public class PlainTV : TyVarBndr
+{
+    public System.Tuple<Name> Items;
+    public PlainTV(Name v1)
+    { Items = System.Tuple.Create(v1); }
+}
+
+// KindedTV Name Kind -- (a :: k)
+[ADTCtor]
+public class KindedTV : TyVarBndr
+{
+    public System.Tuple<Name, Kind> Items;
+    public KindedTV(Name v1, Kind v2)
+    { Items = System.Tuple.Create(v1, v2); }
+}
+
+#endregion
+
 // TODO
 [ADT]
 public abstract class Clause {}
@@ -549,8 +575,6 @@ public abstract class Body {}
 [ADT]
 public abstract class Cxt {}
 
-[ADT]
-public abstract class TyVarBndr {}
 
 [ADT]
 public abstract class FunDep {}
