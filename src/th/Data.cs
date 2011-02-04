@@ -583,6 +583,32 @@ public class ArrowK : Kind
 
 #endregion
 
+#region data Pred
+
+// data Pred
+[ADT]
+public abstract class Pred {}
+
+// ClassP Name [Type] -- Eq (Int, a)
+[ADTCtor]
+public class ClassP : Pred
+{
+    public System.Tuple<Name, List<Type>> Items;
+    public ClassP(Name v1, List<Type> v2)
+    { Items = System.Tuple.Create(v1, v2); }
+}
+
+// EqualP Type Type -- F a ~ Bool
+[ADTCtor]
+public class EqualP : Pred
+{
+    public System.Tuple<Type, Type> Items;
+    public EqualP(Type v1, Type v2)
+    { Items = System.Tuple.Create(v1, v2); }
+}
+
+#endregion
+
 // TODO
 [ADT]
 public abstract class Clause {}
