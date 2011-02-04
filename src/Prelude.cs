@@ -26,4 +26,18 @@ public class Nil<T> : List<T> {}
 [ADTCtor]
 public class String : List<Char> {}
 
+[ADT]
+public abstract class Maybe<T> {}
+
+[ADTCtor]
+public class Just<T> : Maybe<T>
+{
+    public Tuple<T> Items;
+    public Just(T v1)
+    { Items = System.Tuple.Create(v1); }
+}
+
+[ADTCtor]
+public class Nothing<T> : Maybe<T> {}
+
 }
