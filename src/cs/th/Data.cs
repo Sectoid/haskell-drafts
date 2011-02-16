@@ -664,6 +664,33 @@ public class NormalB : Body
 
 #endregion
 
+#region data Guard
+
+// data Guard
+[ADT]
+public abstract class Guard {}
+
+
+// NormalG Exp	
+[ADTCtor]
+public class NormalG : Guard
+{
+  public System.Tuple<Exp> Items;
+  public NormalG(Exp v1)
+  { Items = System.Tuple.Create(v1); }
+}
+
+// PatG [Stmt]	 
+[ADTCtor]
+public class PatG : Guard
+{
+  public System.Tuple<List<Stmt>> Items;
+  public PatG(List<Stmt> v1)
+  { Items = System.Tuple.Create(v1); }
+}
+
+#endregion
+
 // TODO
 
 [ADT]
@@ -701,8 +728,5 @@ public abstract class StrictType {}
 
 [ADT]
 public abstract class VarStrictType {}
-
-[ADT]
-public abstract class Guard {}
 
 }
