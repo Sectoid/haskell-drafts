@@ -691,6 +691,52 @@ public class PatG : Guard
 
 #endregion
 
+#region data Stmt
+
+// data Stmt
+[ADT]
+public abstract class Stmt {}
+
+
+// BindS Pat Exp
+[ADTCtor]
+public class BindS : Stmt
+{
+  public System.Tuple<Pat, Exp> Items;
+  public BindS(Pat v1, Exp v2)
+  { Items = System.Tuple.Create(v1, v2); }
+}
+
+// LetS [Dec]
+[ADTCtor]
+public class LetS : Stmt
+{
+  public System.Tuple<List<Dec>> Items;
+  public LetS(List<Dec> v1)
+  { Items = System.Tuple.Create(v1); }
+}
+
+// NoBindS Exp
+[ADTCtor]
+public class NoBindS : Stmt
+{
+  public System.Tuple<Exp> Items;
+  public NoBindS(Exp v1)
+  { Items = System.Tuple.Create(v1); }
+}
+
+// ParS [[Stmt]]	 
+[ADTCtor]
+public class ParS : Stmt
+{
+  public System.Tuple<List<List<Stmt>>> Items;
+  public ParS(List<List<Stmt>> v1)
+  { Items = System.Tuple.Create(v1); }
+}
+
+#endregion
+
+
 // TODO
 
 [ADT]
@@ -713,9 +759,6 @@ public abstract class FamFlavour {}
 
 [ADT]
 public abstract class Lit {}
-
-[ADT]
-public abstract class Stmt {}
 
 [ADT]
 public abstract class Range {}
