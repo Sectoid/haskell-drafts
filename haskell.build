@@ -17,9 +17,9 @@
   <target name="lang-haskell-runtime" description="compiles Language.Haskell.Runtime module">
     <csc target="library" output="bin/Language.Haskell.Runtime.dll" debug="${debug}">
       <sources>
-        <include name="src/AssemblyInfo.cs" />
-        <include name="src/Attributes.cs" />
-        <include name="src/Prelude.cs" />
+        <include name="src/cs/AssemblyInfo.cs" />
+        <include name="src/cs/Attributes.cs" />
+        <include name="src/cs/Prelude.cs" />
       </sources>
     </csc>
   </target>
@@ -27,8 +27,8 @@
   <target name="lang-haskell-th-syntax" depends="lang-haskell-runtime" description="compiles Language.Haskell.TH.Syntax module">
     <csc target="library" output="bin/Language.Haskell.TH.Syntax.dll" debug="${debug}">
       <sources>
-        <include name="src/th/AssemblyInfo.cs" />
-        <include name="src/th/Data.cs" />
+        <include name="src/cs/th/AssemblyInfo.cs" />
+        <include name="src/cs/th/Data.cs" />
       </sources>
       <references>
         <include name="bin/Language.Haskell.Runtime.dll"/>
