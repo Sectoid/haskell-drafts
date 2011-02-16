@@ -11,12 +11,12 @@ namespace Prelude
 [ADTCtor]
 public class List<T> 
 {
-    public Tuple<T, List<T>> Items;
+  public Tuple<T, List<T>> Items;
     
-    public List(T v1, List<T> v2)
-    { Items = System.Tuple.Create(v1, v2); }
+  public List(T v1, List<T> v2)
+  { Items = System.Tuple.Create(v1, v2); }
 
-    protected List() {} // FIXME: Hack
+  protected List() {} // FIXME: Hack
 }
 
 [ADTCtor]
@@ -32,9 +32,9 @@ public abstract class Maybe<T> {}
 [ADTCtor]
 public class Just<T> : Maybe<T>
 {
-    public Tuple<T> Items;
-    public Just(T v1)
-    { Items = System.Tuple.Create(v1); }
+  public Tuple<T> Items;
+  public Just(T v1)
+  { Items = System.Tuple.Create(v1); }
 }
 
 [ADTCtor]
