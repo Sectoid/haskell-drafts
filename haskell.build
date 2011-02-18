@@ -58,6 +58,7 @@
       <sources>
         <include name="test/cs/phase1/AssemblyInfo.cs" />
         <include name="test/cs/phase1/DomTest.cs" />
+        <include name="test/cs/phase1/Data.cs" />
       </sources>
       <references>
         <include name="nunit.framework.dll"/>
