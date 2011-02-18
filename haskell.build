@@ -16,6 +16,10 @@
     <delete file="bin/Language.Haskell.Phase1.dll" failonerror="false" />
     <delete file="bin/Language.Haskell.Phase1.pdb" failonerror="false" />
     <delete file="bin/Language.Haskell.Phase1.dll.mdb" failonerror="false" />
+
+    <delete file="bin/Language.Haskell.Phase1.Tests.dll" failonerror="false" />
+    <delete file="bin/Language.Haskell.Phase1.Tests.pdb" failonerror="false" />
+    <delete file="bin/Language.Haskell.Phase1.Tests.dll.mdb" failonerror="false" />
   </target>
 
   <target name="lang-haskell-runtime" description="compiles Language.Haskell.Runtime module">
@@ -49,6 +53,27 @@
     </csc>
   </target>
 
+  <target name="test-lang-haskell-phase1" depends="lang-haskell-phase1" description="compiles test for the phase1 assembly">
+    <csc target="library" output="bin/Language.Haskell.Phase1.Tests.dll" debug="${debug}">
+      <sources>
+        <include name="test/cs/phase1/AssemblyInfo.cs" />
+        <include name="test/cs/phase1/DomTest.cs" />
+      </sources>
+      <references>
+        <include name="nunit.framework.dll"/>
+        <include name="bin/Language.Haskell.Phase1.dll"/>
+      </references>      
+    </csc>
+  </target>
+
   <target name="build" depends="lang-haskell-phase1" description="compiles the source code">
   </target>
+
+  <target name="phase1-tests" depends="test-lang-haskell-phase1" description="runs the testsuite(s) for phase1 compiler">
+    <nunit2>
+      <formatter type="Plain" />
+      <test assemblyname="bin/Language.Haskell.Phase1.Tests.dll" />
+    </nunit2>
+  </target>
+
 </project>
