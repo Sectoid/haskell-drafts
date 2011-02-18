@@ -46,9 +46,6 @@
         <include name="src/cs/phase1/AssemblyInfo.cs" />
         <include name="src/cs/phase1/Dom.cs" />
       </sources>
-      <references>
-        <include name="bin/Language.Haskell.Phase1.dll"/>
-      </references>
     </csc>
   </target>
 
