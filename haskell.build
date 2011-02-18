@@ -12,6 +12,10 @@
     <delete file="bin/Language.Haskell.Runtime.dll" failonerror="false" />
     <delete file="bin/Language.Haskell.Runtime.pdb" failonerror="false" />
     <delete file="bin/Language.Haskell.Runtime.dll.mdb" failonerror="false" />
+
+    <delete file="bin/Language.Haskell.Phase1.dll" failonerror="false" />
+    <delete file="bin/Language.Haskell.Phase1.pdb" failonerror="false" />
+    <delete file="bin/Language.Haskell.Phase1.dll.mdb" failonerror="false" />
   </target>
 
   <target name="lang-haskell-runtime" description="compiles Language.Haskell.Runtime module">
@@ -36,6 +40,18 @@
     </csc>
   </target>
 
-  <target name="build" depends="lang-haskell-th-syntax" description="compiles the source code">
+  <target name="lang-haskell-phase1" description="compiles the phase1 assembly">
+    <csc target="library" output="bin/Language.Haskell.Phase1.dll" debug="${debug}">
+      <sources>
+        <include name="src/cs/phase1/AssemblyInfo.cs" />
+        <include name="src/cs/phase1/Dom.cs" />
+      </sources>
+      <references>
+        <include name="bin/Language.Haskell.Phase1.dll"/>
+      </references>
+    </csc>
+  </target>
+
+  <target name="build" depends="lang-haskell-phase1" description="compiles the source code">
   </target>
 </project>
