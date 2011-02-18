@@ -1,0 +1,48 @@
+ParseOk (HsModule 
+                  (SrcLoc {srcFilename = "<unknown>", srcLine = 1, srcColumn = 1})
+                  (Module "Crash") 
+                  Nothing 
+                  [] 
+                  [  
+                      HsTypeSig 
+                               (SrcLoc {srcFilename = "<unknown>", srcLine = 4, srcColumn = 1})
+                               [HsIdent "main"]
+                               (HsQualType 
+                                            [] 
+                                            (HsTyApp 
+                                                     (HsTyCon 
+                                                              (UnQual 
+                                                                      (HsIdent "IO")))
+                                                     (HsTyCon 
+                                                              (Special HsUnitCon))))
+                     ,
+                      HsPatBind 
+                                (SrcLoc {srcFilename = "<unknown>", srcLine = 5, srcColumn = 1})
+                                (HsPVar 
+                                        (HsIdent "main"))
+                                (HsUnGuardedRhs 
+                                                (HsInfixApp 
+                                                            (HsVar 
+                                                                   (UnQual 
+                                                                           (HsIdent "print")))
+                                                            (HsQVarOp 
+                                                                   (UnQual 
+                                                                           (HsSymbol "$")))
+                                                            (HsApp 
+                                                                   (HsApp 
+                                                                          (HsVar 
+                                                                                 (UnQual 
+                                                                                         (HsIdent "map")))
+                                                                          (HsRightSection 
+                                                                                   (HsQVarOp 
+                                                                                             (UnQual 
+                                                                                                     (HsSymbol "*")))
+                                                                                   (HsLit 
+                                                                                          (HsInt 2))))
+                                                                   (HsEnumFromTo 
+                                                                                 (HsLit 
+                                                                                        (HsInt 1))
+                                                                                 (HsLit 
+                                                                                        (HsInt 3))))))
+                                 []
+                   ])
