@@ -49,6 +49,7 @@
       <sources>
         <include name="src/cs/phase1/AssemblyInfo.cs" />
         <include name="src/cs/phase1/Dom.cs" />
+        <include name="src/cs/phase1/IVisitor.cs" />
       </sources>
     </csc>
   </target>
