@@ -27,6 +27,13 @@ public interface IVisitor
   void visit(HsLit node);
   void visit(HsEnumFromTo node);
   void visit(HsInt node);
+  void visit(Qual node);
+  void visit(Special node);
+  void visit(HsUnitCon node);
+  void visit(HsListCon node);
+  void visit(HsFunCon node);
+  void visit(HsTupleCon node);
+  void visit(HsCons node);
 }
 
 }

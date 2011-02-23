@@ -27,6 +27,13 @@ public abstract class EmptyVisitor : IVisitor
   public virtual void visit(HsLit node) {}
   public virtual void visit(HsEnumFromTo node) {}
   public virtual void visit(HsInt node) {}
+  public virtual void visit(Qual node) {}
+  public virtual void visit(Special node) {}
+  public virtual void visit(HsUnitCon node) {}
+  public virtual void visit(HsListCon node) {}
+  public virtual void visit(HsFunCon node) {}
+  public virtual void visit(HsTupleCon node) {}
+  public virtual void visit(HsCons node) {}
 }
 
 public class DFSVisitor : IVisitor
@@ -138,6 +145,23 @@ public class DFSVisitor : IVisitor
   {
     node.accept(Strategy);
   }
+
+  public virtual void visit(Qual node)
+  {
+    node.accept(Strategy);
+  }
+
+  public virtual void visit(Special node)
+  {
+    node.Value.accept(this);
+    node.accept(Strategy);
+  }
+
+  public virtual void visit(HsUnitCon node) { node.accept(Strategy); }
+  public virtual void visit(HsListCon node) { node.accept(Strategy); }
+  public virtual void visit(HsFunCon node) { node.accept(Strategy); }
+  public virtual void visit(HsTupleCon node) { node.accept(Strategy); }
+  public virtual void visit(HsCons node) { node.accept(Strategy); }
 
 }
 

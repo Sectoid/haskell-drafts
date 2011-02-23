@@ -58,6 +58,70 @@ public class UnQual : HsQName
   }
 }
 
+public class Qual : HsQName
+{
+  public string Module { get; set; }
+  public string Name { get; set; }
+
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+}
+
+public class Special : HsQName
+{
+  public HsSpecialCon Value { get; set; }
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+}
+
+[Serializable]
+public abstract class HsSpecialCon : BasicNode {}
+
+public class HsUnitCon : HsSpecialCon
+{
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+}
+
+public class HsListCon : HsSpecialCon
+{
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+}
+
+public class HsFunCon : HsSpecialCon
+{
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+}
+
+public class HsTupleCon : HsSpecialCon
+{
+  public int Count { get; set; }
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+}
+
+public class HsCons : HsSpecialCon
+{
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+}
+
 public class HsModule : BasicNode
 {
   public SrcLoc Location { get; set; }
