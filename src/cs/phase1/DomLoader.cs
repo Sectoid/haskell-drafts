@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
@@ -42,6 +43,12 @@ public class DOMLoader
   public void save(TextWriter output, HsModule module)
   {
     serializer.Serialize(output, module);
+  }
+
+  private BasicNode fillParents(BasicNode node, BasicNode parent = null)
+  {
+    node.Parent = parent;
+    return node;
   }
 }
 

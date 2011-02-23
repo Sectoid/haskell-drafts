@@ -146,19 +146,20 @@ public class DomTests
 
       Assert.That(module, Is.Not.Null);
     }
+    Console.WriteLine("End test");
   }
 
   [Test]
-  public void DebugPrint()
+  public void TestVisitDFS()
   {
     using(var reader = new StringReader(TestData.XmlAST))
     {
       var loader = new DOMLoader();
       var module = loader.load(reader);
 
-      var visitor = new DFSVisitor(new DebugVisitor());
-      module.accept(visitor);
+      module.visitDFSEnd(new DebugVisitor());
     }
+    Console.WriteLine("End test");
   }
 
   [Test]
