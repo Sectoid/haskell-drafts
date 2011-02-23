@@ -27,12 +27,12 @@ public class DOMLoader
 
   public HsModule load(Stream input)
   {
-    return serializer.Deserialize(input) as HsModule;
+    return fillParent(serializer.Deserialize(input) as HsModule, null);
   }
 
   public HsModule load(TextReader input)
   {
-    return serializer.Deserialize(input) as HsModule;
+    return fillParent(serializer.Deserialize(input) as HsModule, null);
   }
 
   public void save(Stream output, HsModule module)
@@ -45,9 +45,13 @@ public class DOMLoader
     serializer.Serialize(output, module);
   }
 
-  private BasicNode fillParents(BasicNode node, BasicNode parent = null)
+  private Node fillParent<Node>(Node node, Node parent)
+    where Node : IAstNode
   {
     node.Parent = parent;
+    foreach(var child in node.Children)
+      fillParent(child, node);
+
     return node;
   }
 }

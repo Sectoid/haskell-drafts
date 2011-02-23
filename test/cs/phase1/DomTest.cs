@@ -146,7 +146,6 @@ public class DomTests
 
       Assert.That(module, Is.Not.Null);
     }
-    Console.WriteLine("End test");
   }
 
   [Test]
@@ -159,7 +158,22 @@ public class DomTests
 
       module.visitDFSEnd(new DebugVisitor());
     }
-    Console.WriteLine("End test");
+  }
+
+  [Test]
+  public void TestParentFill()
+  {
+    using(var reader = new StringReader(TestData.XmlAST))
+    {
+      var loader = new DOMLoader();
+      var module = loader.load(reader);
+
+      module.walkDFS(x =>
+        {
+          if(x != module)
+            Assert.That(x.Parent, Is.Not.Null);
+        });
+    }
   }
 
   [Test]
