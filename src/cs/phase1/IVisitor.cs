@@ -34,6 +34,9 @@ public interface IVisitor
   void visit(HsFunCon node);
   void visit(HsTupleCon node);
   void visit(HsCons node);
+  void visit(HsQVarOp node);
+  void visit(HsQConOp node);
+  void visit(HsAsst node);
 }
 
 }

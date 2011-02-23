@@ -78,7 +78,6 @@ public class Special : HsQName
   }
 }
 
-[Serializable]
 public abstract class HsSpecialCon : BasicNode {}
 
 public class HsUnitCon : HsSpecialCon
@@ -126,6 +125,10 @@ public class HsModule : BasicNode
 {
   public SrcLoc Location { get; set; }
   public string Module { get; set; }
+
+  [XmlArray ("Body")]
+  [XmlArrayItem("HsTypeSig", typeof(HsTypeSig))]
+  [XmlArrayItem("HsPatBind", typeof(HsPatBind))]
   public List<HsDecl> Body { get; set; }
 
   public override void accept(IVisitor visitor)
@@ -141,6 +144,8 @@ public abstract class HsDecl : BasicNode
 
 public class HsTypeSig : HsDecl
 {
+  [XmlArray ("Names")]
+  [XmlArrayItem("HsName", typeof(HsName))]
   public List<HsName> Names { get; set; }
   public HsQualType Type { get; set; }
 
@@ -163,6 +168,22 @@ public class HsQualType : BasicNode
 
 public class HsContext : BasicNode 
 {
+  [XmlArrayItem("HsAsst", typeof(HsAsst))]
+  public List<HsAsst> Assertions { get; set; }
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+}
+
+public class HsAsst : BasicNode
+{
+  public HsQName Name { get; set; }
+
+  [XmlArray("Types")]
+  [XmlArrayItem("HsType", typeof(HsType))]
+  public List<HsType> Types { get; set; }
+
   public override void accept(IVisitor visitor)
   {
     visitor.visit(this);
@@ -182,7 +203,7 @@ public class HsTyApp : HsType
   }
 }
 
-public class HsTyCon : BasicNode
+public class HsTyCon : HsType
 {
   public HsQName Name { get; set; }
 
@@ -296,10 +317,10 @@ public class HsEnumFromTo : HsExp
 
 public abstract class HsLiteral : BasicNode {}
 
-public abstract class HsInt : HsLiteral
+public class HsInt : HsLiteral
 {
   [XmlText]
-  public int Value;
+  public string Value;
 
   public override void accept(IVisitor visitor)
   {
@@ -308,5 +329,26 @@ public abstract class HsInt : HsLiteral
 }
 
 public abstract class HsQOp : BasicNode {}
+
+public class HsQVarOp : HsQOp
+{
+  public HsQName Name { get; set; }
+
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+}
+
+public class HsQConOp : HsQOp
+{
+  public HsQName Name { get; set; }
+
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+}
+
 
 }

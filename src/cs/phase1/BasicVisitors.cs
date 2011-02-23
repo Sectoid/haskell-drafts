@@ -34,6 +34,9 @@ public abstract class EmptyVisitor : IVisitor
   public virtual void visit(HsFunCon node) {}
   public virtual void visit(HsTupleCon node) {}
   public virtual void visit(HsCons node) {}
+  public virtual void visit(HsQVarOp node) {}
+  public virtual void visit(HsQConOp node) {}
+  public virtual void visit(HsAsst node) {}
 }
 
 public class DFSVisitor : IVisitor
@@ -67,7 +70,12 @@ public class DFSVisitor : IVisitor
     node.accept(Strategy);
   }
 
-  public virtual void visit(HsContext node) { node.accept(Strategy); }
+  public virtual void visit(HsContext node) 
+  { 
+    foreach(var asst in node.Assertions)
+      asst.accept(this);
+    node.accept(Strategy); 
+  }
   public virtual void visit(HsPatBind node) 
   {
     node.Pattern.accept(this);
@@ -162,6 +170,25 @@ public class DFSVisitor : IVisitor
   public virtual void visit(HsFunCon node) { node.accept(Strategy); }
   public virtual void visit(HsTupleCon node) { node.accept(Strategy); }
   public virtual void visit(HsCons node) { node.accept(Strategy); }
+
+  public virtual void visit(HsQVarOp node) 
+  {
+    node.Name.accept(this);
+    node.accept(Strategy);
+  }
+  public virtual void visit(HsQConOp node)
+  {
+    node.Name.accept(this);
+    node.accept(Strategy);
+  }
+
+  public virtual void visit(HsAsst node) 
+  { 
+    node.Name.accept(this);
+    foreach(var type in node.Types)
+      type.accept(this);
+    node.accept(Strategy); 
+  }
 
 }
 
