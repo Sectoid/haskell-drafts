@@ -36,8 +36,8 @@ noAttr = []
 traverseModule :: HsModule -> String
 traverseModule (HsModule srcLoc mod _ _ decl) =
    xmlNode "Location" (traverseSrcLoc srcLoc) noAttr ++
-   xmlNode "Module" (traverseMod mod) noAttr
---    show decl
+   xmlNode "Module" (traverseMod mod) noAttr ++
+   xmlNode "Body" (decl >>= traverseHsDecl) noAttr
 
 
 traverseSrcLoc :: SrcLoc -> String
@@ -53,50 +53,55 @@ traverseMod (Module mod) = mod
 
 traverseHsDecl :: HsDecl -> String
 traverseHsDecl (HsTypeDecl srcLoc hsName hsNameList hsType) = 
-    traverseSrcLoc srcLoc
+    xmlNode "HsTypeDecl" (traverseHsName hsName) noAttr
 
 traverseHsDecl (HsDataDecl srcLoc hsContext hsName hsNameList hsConDeclList hsQNameList) =
-    traverseSrcLoc srcLoc
+    xmlNode "HsDataDecl" (traverseSrcLoc srcLoc) noAttr
 
 traverseHsDecl (HsInfixDecl srcLoc hsAssoc int hsOpList) =
-    traverseSrcLoc srcLoc
+    xmlNode "HsInfixDecl" (traverseSrcLoc srcLoc) noAttr
 
 traverseHsDecl (HsNewTypeDecl srcLoc hsContext hsName hsNameList hsConDecl hsQNameList) =
-    traverseSrcLoc srcLoc
+    xmlNode "HsNewTypeDecl" (traverseSrcLoc srcLoc) noAttr
 
 traverseHsDecl (HsClassDecl srcLoc hsContext hsName hsNameList hsDeclList) =
-    traverseSrcLoc srcLoc
+    xmlNode "HsClassDecl" (traverseSrcLoc srcLoc) noAttr
 
 traverseHsDecl (HsInstDecl srcLoc hsContext hsQName hsTypeList hsDeclList) =
-    traverseSrcLoc srcLoc
+    xmlNode "HsInstDecl" (traverseSrcLoc srcLoc) noAttr
 
 traverseHsDecl (HsDefaultDecl srcLoc hsTypeList) =
-    traverseSrcLoc srcLoc
+    xmlNode "HsDefaultDecl" (traverseSrcLoc srcLoc) noAttr
 
 traverseHsDecl (HsTypeSig srcLoc hsNameList hsQualType) =
-    traverseSrcLoc srcLoc
+    xmlNode "HsTypeSig" (traverseHsNameList hsNameList) noAttr
 
-traverseHsDecl (HsFunBind hsMatchlist) = undefined
+traverseHsDecl (HsFunBind hsMatchlist) =
+    xmlNode "HsFunBind" noValue noAttr
 
 traverseHsDecl (HsPatBind srcLoc hsPat hsRhs hsDeclList) =
-    traverseSrcLoc srcLoc
+    xmlNode "HsPatBind" (traverseSrcLoc srcLoc) noAttr
 
 -- currently unused
 traverseHsDecl (HsForeignImport srcLoc string1 hsSafety string2 hsName hsType) = undefined
 traverseHsDecl (HsForeignExport srcLoc string1 string2 hsName hsType) = undefined
 
+traverseHsNameList :: [HsName] -> String
+traverseHsNameList hsNames = xmlNode "Names" (hsNames >>= traverseHsName) noAttr
+
+-- we currently do not differ these two
 traverseHsName :: HsName -> String
-traverseHsName (HsIdent  value) = xmlNode "HsIdent"  value noAttr
-traverseHsName (HsSymbol value) = xmlNode "HsSymbol" value noAttr
+traverseHsName (HsIdent  value) = xmlNode "HsName" value noAttr
+traverseHsName (HsSymbol value) = xmlNode "HsName" value noAttr
 
 trimIndent :: String -> String
 trimIndent [] = []
 trimIndent xs = ' ' : xs
 
 xmlTag :: XMLTagType -> String -> String
-xmlTag TagOpen   value = "<"  ++ value ++ ">"
+xmlTag TagOpen   value = '<'  : value ++ ">"
 xmlTag TagClosed value = "</" ++ value ++ ">"
-xmlTag TagBoth   value = "<"  ++ value ++ "/>"
+xmlTag TagBoth   value = '<'  : value ++ "/>"
 
 xmlNode :: (Show a) => String -> String -> [(String, a)] -> String
 xmlNode name [] attrList =
