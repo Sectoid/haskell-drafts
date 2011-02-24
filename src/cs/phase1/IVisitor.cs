@@ -37,6 +37,7 @@ public interface IVisitor
   void visit(HsQVarOp node);
   void visit(HsQConOp node);
   void visit(HsAsst node);
+  void visit(Module node);
 }
 
 }

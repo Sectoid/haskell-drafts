@@ -55,8 +55,16 @@ public abstract class HsQName : BasicNode {}
 
 public class UnQual : HsQName
 {
-  [XmlText]
-  public string Name { get; set; }
+  public HsName Name { get; set; }
+
+  [XmlIgnore]
+  public override IEnumerable<IAstNode> Children 
+  { 
+    get 
+    { 
+      yield return Name;
+    }
+  }
 
   public override void accept(IVisitor visitor)
   {
@@ -66,8 +74,18 @@ public class UnQual : HsQName
 
 public class Qual : HsQName
 {
-  public string Module { get; set; }
-  public string Name { get; set; }
+  public Module Module { get; set; }
+  public HsName Name { get; set; }
+
+  [XmlIgnore]
+  public override IEnumerable<IAstNode> Children
+  {
+    get
+    {
+      yield return Module;
+      yield return Name;
+    }
+  }
 
   public override void accept(IVisitor visitor)
   {
@@ -81,6 +99,16 @@ public class Special : HsQName
 
   [XmlIgnore]
   public override IEnumerable<IAstNode> Children { get { yield return Value; } }
+
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+}
+
+public class Module : BasicNode
+{
+  public string Name { get; set; }
 
   public override void accept(IVisitor visitor)
   {
@@ -135,7 +163,7 @@ public class HsCons : HsSpecialCon
 public class HsModule : BasicNode
 {
   public SrcLoc Location { get; set; }
-  public string Module { get; set; }
+  public Module Module { get; set; }
 
   [XmlArray ("Body")]
   [XmlArrayItem("HsTypeSig", typeof(HsTypeSig))]
@@ -149,6 +177,7 @@ public class HsModule : BasicNode
     {
       if(Location != null)
         yield return Location;
+      yield return Module;
       foreach (var child in Body)
         yield return child;
     }

@@ -2,7 +2,9 @@
 <HsModule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <!-- this declaration are futher skipped in the sample, but they have to be generated in the common scheme -->
   <Location><SrcLoc srcLine="1" srcColumn="1" /></Location>
-  <Module>Crash</Module>
+  <Module>
+    <Name>Crash</Name>
+  </Module>
   <Body>
     <HsTypeSig>
       <Names>
@@ -14,7 +16,9 @@
 	</Context>
 	<Type xsi:type="HsTyApp">
 	  <First xsi:type="HsTyCon">
-	    <Name xsi:type="UnQual">IO</Name>
+	    <Name xsi:type="UnQual">
+	      <Name>IO</Name>
+	    </Name>
 	  </First>
 	  <Second xsi:type="HsTyCon">
 	    <Name xsi:type="Special">
@@ -33,19 +37,27 @@
       <Rhs xsi:type="HsUnGuardedRhs">
 	<Expression xsi:type="HsInfixApp">
 	  <Left xsi:type="HsVar">
-	    <Name xsi:type="UnQual">print</Name>
+	    <Name xsi:type="UnQual">
+	      <Name>print</Name>
+	    </Name>
 	  </Left>
 	  <Op xsi:type="HsQVarOp">
-	    <Name xsi:type="UnQual">$</Name>
+	    <Name xsi:type="UnQual">
+	      <Name>$</Name>
+	    </Name>
 	  </Op>
 	  <Right xsi:type="HsApp">
 	    <Left xsi:type="HsApp">
 	      <Left xsi:type="HsVar">
-		<Name xsi:type="UnQual">map</Name>
+		<Name xsi:type="UnQual">
+		  <Name>map</Name>
+		</Name>
 	      </Left>
 	      <Right xsi:type="HsRightSection">
 		<Op xsi:type="HsQVarOp">
-		  <Name xsi:type="UnQual">*</Name>
+		  <Name xsi:type="UnQual">
+		    <Name>*</Name>
+		  </Name>
 		</Op>
 		<Right xsi:type="HsLit">
 		  <Value xsi:type="HsInt">2</Value>

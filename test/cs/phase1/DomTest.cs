@@ -129,6 +129,10 @@ public class DebugVisitor : IVisitor
   {
     Console.WriteLine("Visiting {0}", node.ToString());
   }
+  public virtual void visit(Module node)
+  {
+    Console.WriteLine("Visiting {0}", node.ToString());
+  }
 }
 
 
@@ -187,7 +191,7 @@ public class DomTests
       //       { Name = "main" } } };
       var astObj = new HsModule
         { Location = new SrcLoc { Line = 1, Column = 1 },
-          Module = "Crash",
+          Module = new Module { Name = "Crash" },
           Body = new System.Collections.Generic.List<HsDecl>(new HsDecl [] {
               new HsTypeSig {
                 Names = new System.Collections.Generic.List<HsName>( new [] {
@@ -197,13 +201,13 @@ public class DomTests
                   Context = new HsContext {
                     Assertions = new System.Collections.Generic.List<HsAsst>(new [] {
                         new HsAsst {
-                          Name = new UnQual { Name = "Nya", }
+                          Name = new UnQual { Name = new HsName { Name = "Nya", }, },
                         }
                       }),
                   },
                   Type = new HsTyApp {
                     First = new HsTyCon {
-                      Name = new UnQual { Name = "IO" },
+                      Name = new UnQual { Name = new HsName { Name = "IO", }, },
                     },
                     Second = new HsTyCon {
                       Name = new Special { Value = new HsUnitCon {}, },
