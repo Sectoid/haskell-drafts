@@ -5,13 +5,13 @@
   <property name="force" value="false" overwrite="false" />
 
   <target name="clean" description="cleans the tree">
-    <delete file="bin/Language.Haskell.TH.Syntax.dll" failonerror="false" />
-    <delete file="bin/Language.Haskell.TH.Syntax.pdb" failonerror="false" />
-    <delete file="bin/Language.Haskell.TH.Syntax.dll.mdb" failonerror="false" />
+    <delete file="bin/phase1.exe" failonerror="false" />
+    <delete file="bin/phase1.pdb" failonerror="false" />
+    <delete file="bin/phase1.exe.mdb" failonerror="false" />
 
-    <delete file="bin/Language.Haskell.Runtime.dll" failonerror="false" />
-    <delete file="bin/Language.Haskell.Runtime.pdb" failonerror="false" />
-    <delete file="bin/Language.Haskell.Runtime.dll.mdb" failonerror="false" />
+    <delete file="bin/Language.Haskell.Phase1.Runtime.dll" failonerror="false" />
+    <delete file="bin/Language.Haskell.Phase1.Runtime.pdb" failonerror="false" />
+    <delete file="bin/Language.Haskell.Phase1.Runtime.dll.mdb" failonerror="false" />
 
     <delete file="bin/Language.Haskell.Phase1.dll" failonerror="false" />
     <delete file="bin/Language.Haskell.Phase1.pdb" failonerror="false" />
@@ -22,29 +22,17 @@
     <delete file="bin/Language.Haskell.Phase1.Tests.dll.mdb" failonerror="false" />
   </target>
 
-  <target name="lang-haskell-runtime" description="compiles Language.Haskell.Runtime module">
-    <csc target="library" output="bin/Language.Haskell.Runtime.dll" debug="${debug}">
+  <target name="lang-haskell-phase1-runtime" description="compiles Language.Haskell.Phase1.Runtime module">
+    <csc target="library" output="bin/Language.Haskell.Phase1.Runtime.dll" debug="${debug}">
       <sources>
-        <include name="src/cs/AssemblyInfo.cs" />
-        <include name="src/cs/Attributes.cs" />
-        <include name="src/cs/Prelude.cs" />
+        <include name="src/cs/phase1/runtime/AssemblyInfo.cs" />
+        <include name="src/cs/phase1/runtime/Attributes.cs" />
+        <include name="src/cs/phase1/runtime/Module.cs" />
       </sources>
     </csc>
   </target>
 
-  <target name="lang-haskell-th-syntax" depends="lang-haskell-runtime" description="compiles Language.Haskell.TH.Syntax module">
-    <csc target="library" output="bin/Language.Haskell.TH.Syntax.dll" debug="${debug}">
-      <sources>
-        <include name="src/cs/th/AssemblyInfo.cs" />
-        <include name="src/cs/th/Data.cs" />
-      </sources>
-      <references>
-        <include name="bin/Language.Haskell.Runtime.dll"/>
-      </references>
-    </csc>
-  </target>
-
-  <target name="lang-haskell-phase1" description="compiles the phase1 assembly">
+  <target name="lang-haskell-phase1" depends="lang-haskell-phase1-runtime" description="compiles the phase1 assembly">
     <csc target="library" output="bin/Language.Haskell.Phase1.dll" debug="${debug}">
       <sources>
         <include name="src/cs/phase1/AssemblyInfo.cs" />
