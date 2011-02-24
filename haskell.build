@@ -61,12 +61,15 @@
       <sources>
         <include name="test/cs/phase1/AssemblyInfo.cs" />
         <include name="test/cs/phase1/DomTest.cs" />
-        <include name="test/cs/phase1/Data.cs" />
+        <include name="test/cs/phase1/EchoVisitor.cs" />
       </sources>
+      <resources prefix="Language.Haskell.Phase1.Tests.Data">
+	<include name="test/cs/phase1/xml/Test1.xml" />
+      </resources>
       <references>
         <include name="nunit.framework.dll"/>
         <include name="bin/Language.Haskell.Phase1.dll"/>
-      </references>      
+      </references>
     </csc>
   </target>
 

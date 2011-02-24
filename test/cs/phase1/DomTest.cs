@@ -10,174 +10,48 @@ using NUnit.Framework.SyntaxHelpers;
 namespace Language.Haskell.Phase1.DOM
 {
 
-public class DebugVisitor : IVisitor
-{
-  public virtual void visit(SrcLoc node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsName node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(UnQual node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsModule node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsQualType node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsTypeSig node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsContext node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsPatBind node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsTyApp node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsTyCon node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsPVar node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsUnGuardedRhs node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsInfixApp node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsApp node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsVar node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsRightSection node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsLit node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsEnumFromTo node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsInt node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-
-  public virtual void visit(Qual node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(Special node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsUnitCon node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsListCon node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsFunCon node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsTupleCon node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsCons node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsQVarOp node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsQConOp node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(HsAsst node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-  public virtual void visit(Module node)
-  {
-    Console.WriteLine("Visiting {0}", node.ToString());
-  }
-}
-
-
 [TestFixture]
 public class DomTests
 {
 
+  private Stream dataStream1 = null;
+
+  [SetUp]
+  public void Init()
+  {
+    var assembly = this.GetType().Assembly;
+    dataStream1 = assembly.GetManifestResourceStream("Language.Haskell.Phase1.Tests.Data.Test1.xml");
+  }
+
   [Test]
   public void SillyDeserialization()
   {
-    using(var reader = new StringReader(TestData.XmlAST))
-    {
-      var loader = new DOMLoader();
-      var module = loader.load(reader);
-
-      Assert.That(module, Is.Not.Null);
-    }
+    var loader = new DOMLoader();
+    var module = loader.load(dataStream1);
+    
+    Assert.That(module, Is.Not.Null);
   }
 
   [Test]
   public void TestVisitDFS()
   {
-    using(var reader = new StringReader(TestData.XmlAST))
-    {
-      var loader = new DOMLoader();
-      var module = loader.load(reader);
-
-      module.visitDFSEnd(new DebugVisitor());
-    }
+    var loader = new DOMLoader();
+    var module = loader.load(dataStream1);
+    
+    module.visitDFSEnd(new EchoVisitor());
   }
 
   [Test]
   public void TestParentFill()
   {
-    using(var reader = new StringReader(TestData.XmlAST))
-    {
-      var loader = new DOMLoader();
-      var module = loader.load(reader);
-
-      module.walkDFS(x =>
-        {
-          if(x != module)
-            Assert.That(x.Parent, Is.Not.Null);
-        });
-    }
+    var loader = new DOMLoader();
+    var module = loader.load(dataStream1);
+    
+    module.walkDFS(x =>
+      {
+        if(x != module)
+          Assert.That(x.Parent, Is.Not.Null);
+      });
   }
 
   [Test]
@@ -185,10 +59,6 @@ public class DomTests
   {
     using(var writer = new StringWriter())
     {
-      // var astObj = new HsPatBind 
-      //   { Pattern = new HsPVar 
-      //     { Name = new HsName 
-      //       { Name = "main" } } };
       var astObj = new HsModule
         { Location = new SrcLoc { Line = 1, Column = 1 },
           Module = new Module { Name = "Crash" },
