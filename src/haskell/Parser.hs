@@ -1,5 +1,7 @@
-module Parser
+module Main
     where
+
+import System.Environment
 
 import Language.Haskell.Parser
 import Language.Haskell.Pretty
@@ -8,24 +10,18 @@ import Language.Haskell.Syntax
 import Control.Applicative
 import Control.Monad
 
-data XMLTagType = TagOpen
-                | TagClosed
-                | TagBoth
-
-instance Functor ParseResult where
-    fmap f (ParseOk x)           = ParseOk $ f x
-    fmap f (ParseFailed loc msg) = ParseFailed loc msg
-
-instance Applicative ParseResult where
-    pure = ParseOk
-    ParseOk f           <*> x = f <$> x
-    ParseFailed loc msg <*> _ = ParseFailed loc msg
+import Show
+import XML
 
 noValue :: String
 noValue = []
 
 noAttr :: [(String, String)]
 noAttr = []
+
+stripResult :: ParseResult HsModule -> HsModule
+stripResult (ParseOk m)       = m
+stripResult (ParseFailed _ _) = undefined
 
 traverseModule :: HsModule -> String
 traverseModule (HsModule srcLoc mod _ _ decl) =
@@ -116,25 +112,6 @@ traverseHsQName (UnQual name)   = strip name
 traverseHsQName (Special con)   =
     xmlNode "Value" noValue [("xsi:type", showHsSpecialCon con)]
 
-showHsType :: HsType -> String
-showHsType (HsTyFun _ _)        = "HsTyFun"
-showHsType (HsTyTuple _)        = "HsTyTuple"
-showHsType (HsTyApp _ _)        = "HsTyApp"
-showHsType (HsTyVar _)          = "HsTyVar"
-showHsType (HsTyCon _)          = "HsTyCon"
-
-showHsQName :: HsQName -> String
-showHsQName (Qual _ _)          = "Qual"
-showHsQName (UnQual _)          = "UnQual"
-showHsQName (Special _)         = "Special"
-
-showHsSpecialCon :: HsSpecialCon -> String
-showHsSpecialCon HsUnitCon      = "HsUnitCon"
-showHsSpecialCon HsListCon      = "HsListCon"
-showHsSpecialCon HsFunCon       = "HsFunCon"
-showHsSpecialCon (HsTupleCon _) = "HsTupleCon"
-showHsSpecialCon HsCons         = "HsCons"
-
 -- todo
 traverseHsAsst :: HsAsst -> String
 traverseHsAsst asst = undefined
@@ -148,34 +125,14 @@ traverseHsName :: HsName -> String
 traverseHsName (HsIdent  value) = xmlNode "HsName" value noAttr
 traverseHsName (HsSymbol value) = xmlNode "HsName" value noAttr
 
-trimIndent :: String -> String
-trimIndent [] = []
-trimIndent xs = ' ' : xs
-
-xmlTag :: XMLTagType -> String -> String
-xmlTag TagOpen   value = '<'       : value ++ ">"
-xmlTag TagClosed value = '<' : '/' : value ++ ">"
-xmlTag TagBoth   value = '<'       : value ++ "/>"
-
-xmlNode :: String -> String -> [(String, String)] -> String
-xmlNode name [] attrList =
-    xmlTag TagBoth (name ++ trimIndent (attrList >>= xmlAttr))
-
-xmlNode name value attrList = 
-    xmlTag TagOpen (name ++ trimIndent (attrList >>= xmlAttr)) ++
-    value ++
-    xmlTag TagClosed name
-
-xmlAttr :: (String, String) -> String
-xmlAttr (name, value) = name ++ "=\"" ++ value ++ "\" "
-
 -- HsModule SrcLoc Module (Maybe [HsExportSpec]) [HsImportDecl] [HsDecl]
 
 
 main :: IO ()
 main = do
-  contents <- readFile "./Crash.hs"
-  print $ traverseModule <$> parseModule contents
+  args <- getArgs
+  contents <- readFile (head args)
+  putStrLn $ (traverseModule . stripResult . parseModule) contents
 
 
 --  print $ parseModule contents
