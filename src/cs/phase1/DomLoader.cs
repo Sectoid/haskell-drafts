@@ -5,7 +5,9 @@ using System.IO;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace Language.Haskell.Phase1.DOM
+using Language.Haskell.Phase1.DOM;
+
+namespace Language.Haskell.Phase1
 {
 
 public class DOMLoader

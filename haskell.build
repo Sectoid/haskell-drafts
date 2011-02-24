@@ -56,6 +56,17 @@
     </csc>
   </target>
 
+  <target name="lang-haskell-phase1-hsc" depends="lang-haskell-phase1" description="compiles the phase1 hsc">
+    <csc target="exe" output="bin/phase1.exe" debug="${debug}">
+      <sources>
+        <include name="src/cs/phase1/main.cs" />
+      </sources>
+      <references>
+        <include name="bin/Language.Haskell.Phase1.dll"/>
+      </references>
+    </csc>
+  </target>
+
   <target name="test-lang-haskell-phase1" depends="lang-haskell-phase1" description="compiles test for the phase1 assembly">
     <csc target="library" output="bin/Language.Haskell.Phase1.Tests.dll" debug="${debug}">
       <sources>
