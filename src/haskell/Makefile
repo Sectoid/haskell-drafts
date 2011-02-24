@@ -1,4 +1,4 @@
 .PHONY: all
 
 all:
-	echo "I'm stub!"
+	ghc -o ../../bin/Parser --make Parser.hs
