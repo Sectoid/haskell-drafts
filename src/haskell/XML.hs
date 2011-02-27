@@ -1,4 +1,4 @@
-module XML (xmlNode, xmlAttr)
+module XML (xmlNode, xmlAttr, xsiType)
     where
 
 data XMLTagType = TagOpen
@@ -25,3 +25,6 @@ xmlNode name value attrList =
 
 xmlAttr :: (String, String) -> String
 xmlAttr (name, value) = name ++ "=\"" ++ value ++ "\" "
+
+xsiType :: String -> (String, String)
+xsiType value = ("xsi:type", value)
