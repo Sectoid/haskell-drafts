@@ -1,4 +1,4 @@
-module XML (xmlNode, xmlAttr, xsiType)
+module XML (xmlNode, xmlAttr, xsiType, noValue, noAttr)
     where
 
 data XMLTagType = TagOpen
@@ -28,3 +28,9 @@ xmlAttr (name, value) = name ++ "=\"" ++ value ++ "\" "
 
 xsiType :: String -> (String, String)
 xsiType value = ("xsi:type", value)
+
+noValue :: String
+noValue = []
+
+noAttr :: [(String, String)]
+noAttr = []
