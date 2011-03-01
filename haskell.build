@@ -26,8 +26,8 @@
     <csc target="library" output="bin/Language.Haskell.Phase1.Runtime.dll" debug="${debug}">
       <sources>
         <include name="src/cs/phase1/runtime/AssemblyInfo.cs" />
-        <include name="src/cs/phase1/runtime/Attributes.cs" />
-        <include name="src/cs/phase1/runtime/Module.cs" />
+        <include name="src/cs/phase1/runtime/Base.cs" />
+        <include name="src/cs/phase1/runtime/PreludeModule.cs" />
       </sources>
     </csc>
   </target>
