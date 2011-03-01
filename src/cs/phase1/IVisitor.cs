@@ -38,6 +38,13 @@ public interface IVisitor
   void visit(HsQConOp node);
   void visit(HsAsst node);
   void visit(Module node);
+  void visit(HsImportDecl node);
+  void visit(HsIVar node);
+  void visit(HsIAbs node);
+  void visit(HsIThingAll node);
+  void visit(HsIThingWith node);
+  void visit(HsVarName node);
+  void visit(HsConName node);
 }
 
 }

@@ -165,10 +165,15 @@ public class HsModule : BasicNode
   public SrcLoc Location { get; set; }
   public Module Module { get; set; }
 
+  [XmlArray("Imports")]
+  [XmlArrayItem("HsImportDecl", typeof(HsImportDecl))]
+  public List<HsImportDecl> Imports { get; set; }
+
   [XmlArray ("Body")]
   [XmlArrayItem("HsTypeSig", typeof(HsTypeSig))]
   [XmlArrayItem("HsPatBind", typeof(HsPatBind))]
   public List<HsDecl> Body { get; set; }
+
 
   [XmlIgnore]
   public override IEnumerable<IAstNode> Children 
@@ -178,6 +183,8 @@ public class HsModule : BasicNode
       if(Location != null)
         yield return Location;
       yield return Module;
+      foreach (var @import in Imports)
+        yield return @import;
       foreach (var child in Body)
         yield return child;
     }
@@ -568,6 +575,142 @@ public class HsQConOp : HsQOp
   {
     visitor.visit(this);
   }
+}
+
+public class HsImportDecl : BasicNode
+{
+  public SrcLoc Location { get; set; }
+  public Module Module { get; set; }
+  public bool Qualified { get; set; }
+  public Module As { get; set; } // This is an option
+  public bool SpecsExcluded { get; set; }
+
+  [XmlArray ("Specs")]
+  [XmlArrayItem("HsIVar", typeof(HsIVar))]
+  [XmlArrayItem("HsIAbs", typeof(HsIAbs))]
+  [XmlArrayItem("HsIThingAll", typeof(HsIThingAll))]
+  [XmlArrayItem("HsIThingWith", typeof(HsIThingWith))]
+  public List<HsImportSpec> Specs { get; set; } // This is an option
+
+  [XmlIgnore]
+  public override IEnumerable<IAstNode> Children 
+  { 
+    get 
+    {
+      yield return Location;
+      yield return Module;
+      if(As != null) yield return As;
+      if(Specs != null)
+        foreach(var spec in Specs)
+          yield return spec;
+    }
+  }
+
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+}
+
+public abstract class HsImportSpec : BasicNode {}
+
+public class HsIVar : HsImportSpec
+{
+  public HsName Name { get; set; }
+
+  [XmlIgnore]
+  public override IEnumerable<IAstNode> Children { get { yield return Name; } }
+
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+
+}
+
+public class HsIAbs : HsImportSpec
+{
+  public HsName Name { get; set; }
+
+  [XmlIgnore]
+  public override IEnumerable<IAstNode> Children { get { yield return Name; } }
+
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+
+}
+
+public class HsIThingAll : HsImportSpec
+{
+  public HsName Name { get; set; }
+
+  [XmlIgnore]
+  public override IEnumerable<IAstNode> Children { get { yield return Name; } }
+
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+
+}
+
+public class HsIThingWith : HsImportSpec
+{
+  public HsName Name { get; set; }
+
+  [XmlArray ("Components")]
+  [XmlArrayItem("HsVarName", typeof(HsVarName))]
+  [XmlArrayItem("HsConName", typeof(HsConName))]
+  public List<HsCName> Components { get; set; }
+
+  [XmlIgnore]
+  public override IEnumerable<IAstNode> Children 
+  { 
+    get 
+    { 
+      yield return Name;
+      foreach(var comp in Components)
+        yield return comp;
+    } 
+  }
+
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+
+}
+
+public abstract class HsCName : BasicNode {}
+
+public class HsVarName : HsCName
+{
+  public HsName Name { get; set; }
+
+  [XmlIgnore]
+  public override IEnumerable<IAstNode> Children { get { yield return Name; } }
+
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+
+}
+
+public class HsConName : HsCName
+{
+  public HsName Name { get; set; }
+
+  [XmlIgnore]
+  public override IEnumerable<IAstNode> Children { get { yield return Name; } }
+
+  public override void accept(IVisitor visitor)
+  {
+    visitor.visit(this);
+  }
+
 }
 
 

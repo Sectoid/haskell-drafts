@@ -132,6 +132,34 @@ public class EchoVisitor : IVisitor
   {
     Console.WriteLine("Visiting {0}", node.ToString());
   }
+  public virtual void visit(HsImportDecl node)
+  {
+    Console.WriteLine("Visiting {0}", node.ToString());
+  }
+  public virtual void visit(HsIVar node)
+  {
+    Console.WriteLine("Visiting {0}", node.ToString());
+  }
+  public virtual void visit(HsIAbs node)
+  {
+    Console.WriteLine("Visiting {0}", node.ToString());
+  }
+  public virtual void visit(HsIThingAll node)
+  {
+    Console.WriteLine("Visiting {0}", node.ToString());
+  }
+  public virtual void visit(HsIThingWith node)
+  {
+    Console.WriteLine("Visiting {0}", node.ToString());
+  }
+  public virtual void visit(HsVarName node)
+  {
+    Console.WriteLine("Visiting {0}", node.ToString());
+  }
+  public virtual void visit(HsConName node)
+  {
+    Console.WriteLine("Visiting {0}", node.ToString());
+  }
 }
 
 }

@@ -38,6 +38,13 @@ public abstract class EmptyVisitor : IVisitor
   public virtual void visit(HsQConOp node) {}
   public virtual void visit(HsAsst node) {}
   public virtual void visit(Module node) {}
+  public virtual void visit(HsImportDecl node) {}
+  public virtual void visit(HsIVar node) {}
+  public virtual void visit(HsIAbs node) {}
+  public virtual void visit(HsIThingAll node) {}
+  public virtual void visit(HsIThingWith node) {}
+  public virtual void visit(HsVarName node) {}
+  public virtual void visit(HsConName node) {}
 }
 
 public static class VisitingExtensions
