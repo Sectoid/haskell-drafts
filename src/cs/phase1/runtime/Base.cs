@@ -10,17 +10,28 @@ namespace Language.Haskell.Phase1.Runtime
 [AttributeUsage(AttributeTargets.Class, 
                 Inherited = false,
                 AllowMultiple = true)]
-public class Import : Attribute 
+public class ImportAttribute : Attribute 
 {
-  public Import(Type t) {}
+  public Type Type { get; set; }
+  public ImportAttribute(Type t) { Type = t; }
 }
+
+[AttributeUsage(AttributeTargets.Class, 
+                Inherited = false,
+                AllowMultiple = true)]
+public class ExportAttribute : Attribute 
+{
+  public Type Type { get; set; }
+  public ExportAttribute(Type t) { Type = t; }
+}
+
 
 [AttributeUsage(AttributeTargets.Method, 
                 Inherited = false,
                 AllowMultiple = false)]
-public class Name : Attribute 
+public class NameAttribute : Attribute 
 {
-  public Name(string name) {}
+  public NameAttribute(string name) {}
 }
 
 [AttributeUsage(AttributeTargets.Class, 

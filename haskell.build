@@ -37,6 +37,7 @@
       <sources>
         <include name="src/cs/phase1/AssemblyInfo.cs" />
         <include name="src/cs/phase1/Dom.cs" />
+        <include name="src/cs/phase1/DomQualified.cs" />
         <include name="src/cs/phase1/DomLoader.cs" />
         <include name="src/cs/phase1/IVisitor.cs" />
         <include name="src/cs/phase1/BasicVisitors.cs" />

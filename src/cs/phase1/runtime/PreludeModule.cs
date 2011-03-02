@@ -3,13 +3,13 @@
 using System;
 using HsRuntime = Language.Haskell.Phase1.Runtime;
 
-[HsRuntime.Import(typeof(HsRuntime.Prelude.Show<>))]
-[HsRuntime.Import(typeof(HsRuntime.Prelude.Monad<>))]
-[HsRuntime.Import(typeof(HsRuntime.Prelude.Maybe<>))]
-[HsRuntime.Import(typeof(HsRuntime.Prelude.Functor<>))]
-[HsRuntime.Import(typeof(HsRuntime.Prelude.List<>))]
-[HsRuntime.Import(typeof(HsRuntime.Prelude.Monad_Maybe))]
-[HsRuntime.Import(typeof(HsRuntime.Prelude.Eq_List<>))]
+[HsRuntime.Export(typeof(HsRuntime.Prelude.Show<>))]
+[HsRuntime.Export(typeof(HsRuntime.Prelude.Monad<>))]
+[HsRuntime.Export(typeof(HsRuntime.Prelude.Maybe<>))]
+[HsRuntime.Export(typeof(HsRuntime.Prelude.Functor<>))]
+[HsRuntime.Export(typeof(HsRuntime.Prelude.List<>))]
+[HsRuntime.Export(typeof(HsRuntime.Prelude.Monad_Maybe))]
+[HsRuntime.Export(typeof(HsRuntime.Prelude.Eq_List<>))]
 public class Prelude : HsRuntime.Module
 {
   public static void error(String message)

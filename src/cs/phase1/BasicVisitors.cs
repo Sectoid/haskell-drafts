@@ -6,6 +6,19 @@ using Language.Haskell.Phase1.DOM;
 namespace Language.Haskell.Phase1
 {
 
+public abstract class CompileErrorException : Exception 
+{
+  public CompileErrorException(string message) : base(message) {}
+}
+
+public abstract class LocatedErrorException : CompileErrorException 
+{
+  public LocatedErrorException(SrcLoc location, string message)
+  : base(String.Format("{0}({1},{2}): {3}",
+                       location.FileName, location.Line, location.Column,
+                       message)) {}
+}
+
 public abstract class EmptyVisitor : IVisitor
 {
   public virtual void visit(SrcLoc node) {}
@@ -81,6 +94,11 @@ public static class VisitingExtensions
     if(node.Parent == null) return null;
 
     return (node.Parent as Node) ?? node.Parent.findParentOfType<Node>();
+  }
+
+  public static HsModule module(this IAstNode node)
+  {
+    return node.findParentOfType<HsModule>();
   }
 }
 

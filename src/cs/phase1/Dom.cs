@@ -1,9 +1,8 @@
-// -*- mode: csharp; indent-tabs-mode: nil; c-basic-offset: 2; -*-
+ // -*- mode: csharp; indent-tabs-mode: nil; c-basic-offset: 2; -*-
 
 using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-
 
 namespace Language.Haskell.Phase1.DOM
 {
@@ -27,8 +26,11 @@ public abstract class BasicNode : IAstNode
   public abstract void accept(IVisitor visitor);
 }
 
-public class SrcLoc : BasicNode
+public partial class SrcLoc : BasicNode
 {
+  // [XmlAttribute("fileName")]
+  [XmlIgnore]
+  public string FileName { get; set; }
   [XmlAttribute("srcLine")]
   public int Line { get; set; }
   [XmlAttribute("srcColumn")]
@@ -40,7 +42,7 @@ public class SrcLoc : BasicNode
   }
 }
 
-public class HsName : BasicNode
+public partial class HsName : BasicNode
 {
   [XmlText]
   public string Name { get; set; }
@@ -58,7 +60,7 @@ public class HsName : BasicNode
 
 public abstract class HsQName : BasicNode {}
 
-public class UnQual : HsQName
+public partial class UnQual : HsQName
 {
   public HsName Name { get; set; }
 
@@ -77,7 +79,7 @@ public class UnQual : HsQName
   }
 }
 
-public class Qual : HsQName
+public partial class Qual : HsQName
 {
   public Module Module { get; set; }
   public HsName Name { get; set; }
@@ -98,7 +100,7 @@ public class Qual : HsQName
   }
 }
 
-public class Special : HsQName
+public partial class Special : HsQName
 {
   public HsSpecialCon Value { get; set; }
 
@@ -111,7 +113,7 @@ public class Special : HsQName
   }
 }
 
-public class Module : BasicNode
+public partial class Module : BasicNode
 {
   public string Name { get; set; }
 
@@ -123,7 +125,7 @@ public class Module : BasicNode
 
 public abstract class HsSpecialCon : BasicNode {}
 
-public class HsUnitCon : HsSpecialCon
+public partial class HsUnitCon : HsSpecialCon
 {
   public override void accept(IVisitor visitor)
   {
@@ -131,7 +133,7 @@ public class HsUnitCon : HsSpecialCon
   }
 }
 
-public class HsListCon : HsSpecialCon
+public partial class HsListCon : HsSpecialCon
 {
   public override void accept(IVisitor visitor)
   {
@@ -139,7 +141,7 @@ public class HsListCon : HsSpecialCon
   }
 }
 
-public class HsFunCon : HsSpecialCon
+public partial class HsFunCon : HsSpecialCon
 {
   public override void accept(IVisitor visitor)
   {
@@ -147,7 +149,7 @@ public class HsFunCon : HsSpecialCon
   }
 }
 
-public class HsTupleCon : HsSpecialCon
+public partial class HsTupleCon : HsSpecialCon
 {
   public int Count { get; set; }
 
@@ -157,7 +159,7 @@ public class HsTupleCon : HsSpecialCon
   }
 }
 
-public class HsCons : HsSpecialCon
+public partial class HsCons : HsSpecialCon
 {
   public override void accept(IVisitor visitor)
   {
@@ -165,7 +167,7 @@ public class HsCons : HsSpecialCon
   }
 }
 
-public class HsModule : BasicNode
+public partial class HsModule : BasicNode
 {
   public SrcLoc Location { get; set; }
   public Module Module { get; set; }
@@ -206,7 +208,7 @@ public abstract class HsDecl : BasicNode
   public SrcLoc Location { get; set; }
 }
 
-public class HsTypeSig : HsDecl
+public partial class HsTypeSig : HsDecl
 {
   [XmlArray ("Names")]
   [XmlArrayItem("HsName", typeof(HsName))]
@@ -232,7 +234,7 @@ public class HsTypeSig : HsDecl
   }
 }
 
-public class HsQualType : BasicNode
+public partial class HsQualType : BasicNode
 {
   public HsContext Context { get; set; }
   public HsType Type { get; set; }
@@ -253,7 +255,7 @@ public class HsQualType : BasicNode
   }
 }
 
-public class HsContext : BasicNode 
+public partial class HsContext : BasicNode 
 {
   [XmlArrayItem("HsAsst", typeof(HsAsst))]
   public List<HsAsst> Assertions { get; set; }
@@ -274,7 +276,7 @@ public class HsContext : BasicNode
   }
 }
 
-public class HsAsst : BasicNode
+public partial class HsAsst : BasicNode
 {
   public HsQName Name { get; set; }
 
@@ -301,7 +303,7 @@ public class HsAsst : BasicNode
 
 public abstract class HsType : BasicNode {}
 
-public class HsTyApp : HsType
+public partial class HsTyApp : HsType
 {
   public HsType First { get; set; }
   public HsType Second { get; set; }
@@ -322,7 +324,7 @@ public class HsTyApp : HsType
   }
 }
 
-public class HsTyCon : HsType
+public partial class HsTyCon : HsType
 {
   public HsQName Name { get; set; }
 
@@ -341,7 +343,7 @@ public class HsTyCon : HsType
   }
 }
 
-public class HsPatBind : HsDecl
+public partial class HsPatBind : HsDecl
 {
   public HsPat Pattern { get; set; }
   public HsRhs Rhs { get; set; }
@@ -364,7 +366,7 @@ public class HsPatBind : HsDecl
 
 public abstract class HsPat : BasicNode {}
 
-public class HsPVar : HsPat
+public partial class HsPVar : HsPat
 {
   public HsName Name { get; set; }
 
@@ -385,7 +387,7 @@ public class HsPVar : HsPat
 
 public abstract class HsRhs : BasicNode {}
 
-public class HsUnGuardedRhs : HsRhs
+public partial class HsUnGuardedRhs : HsRhs
 {
   public HsExp Expression { get; set; }
 
@@ -406,7 +408,7 @@ public class HsUnGuardedRhs : HsRhs
 
 public abstract class HsExp : BasicNode {}
 
-public class HsInfixApp : HsExp
+public partial class HsInfixApp : HsExp
 {
   public HsExp Left { get; set; }
   public HsQOp Op { get; set; }
@@ -429,7 +431,7 @@ public class HsInfixApp : HsExp
   }
 }
 
-public class HsApp : HsExp
+public partial class HsApp : HsExp
 {
   public HsExp Left { get; set; }
   public HsExp Right { get; set; }
@@ -450,7 +452,7 @@ public class HsApp : HsExp
   }
 }
 
-public class HsVar : HsExp
+public partial class HsVar : HsExp
 {
   public HsQName Name { get; set; }
   [XmlIgnore]
@@ -468,7 +470,7 @@ public class HsVar : HsExp
   }
 }
 
-public class HsRightSection : HsExp
+public partial class HsRightSection : HsExp
 {
   public HsQOp Op { get; set; }
   public HsExp Right { get; set; }
@@ -489,7 +491,7 @@ public class HsRightSection : HsExp
   }
 }
 
-public class HsLit : HsExp
+public partial class HsLit : HsExp
 {
   public HsLiteral Value { get; set; }
 
@@ -508,7 +510,7 @@ public class HsLit : HsExp
   }
 }
 
-public class HsEnumFromTo : HsExp
+public partial class HsEnumFromTo : HsExp
 {
   public HsExp From { get; set; }
   public HsExp To { get; set; }
@@ -531,7 +533,7 @@ public class HsEnumFromTo : HsExp
 
 public abstract class HsLiteral : BasicNode {}
 
-public class HsInt : HsLiteral
+public partial class HsInt : HsLiteral
 {
   [XmlText]
   public string Value;
@@ -544,7 +546,7 @@ public class HsInt : HsLiteral
 
 public abstract class HsQOp : BasicNode {}
 
-public class HsQVarOp : HsQOp
+public partial class HsQVarOp : HsQOp
 {
   public HsQName Name { get; set; }
 
@@ -563,7 +565,7 @@ public class HsQVarOp : HsQOp
   }
 }
 
-public class HsQConOp : HsQOp
+public partial class HsQConOp : HsQOp
 {
   public HsQName Name { get; set; }
 
@@ -582,7 +584,7 @@ public class HsQConOp : HsQOp
   }
 }
 
-public class HsImportDecl : BasicNode
+public partial class HsImportDecl : BasicNode
 {
   public SrcLoc Location { get; set; }
   public Module Module { get; set; }
@@ -619,7 +621,7 @@ public class HsImportDecl : BasicNode
 
 public abstract class HsImportSpec : BasicNode {}
 
-public class HsIVar : HsImportSpec
+public partial class HsIVar : HsImportSpec
 {
   public HsName Name { get; set; }
 
@@ -633,7 +635,7 @@ public class HsIVar : HsImportSpec
 
 }
 
-public class HsIAbs : HsImportSpec
+public partial class HsIAbs : HsImportSpec
 {
   public HsName Name { get; set; }
 
@@ -647,7 +649,7 @@ public class HsIAbs : HsImportSpec
 
 }
 
-public class HsIThingAll : HsImportSpec
+public partial class HsIThingAll : HsImportSpec
 {
   public HsName Name { get; set; }
 
@@ -661,7 +663,7 @@ public class HsIThingAll : HsImportSpec
 
 }
 
-public class HsIThingWith : HsImportSpec
+public partial class HsIThingWith : HsImportSpec
 {
   public HsName Name { get; set; }
 
@@ -690,7 +692,7 @@ public class HsIThingWith : HsImportSpec
 
 public abstract class HsCName : BasicNode {}
 
-public class HsVarName : HsCName
+public partial class HsVarName : HsCName
 {
   public HsName Name { get; set; }
 
@@ -704,7 +706,7 @@ public class HsVarName : HsCName
 
 }
 
-public class HsConName : HsCName
+public partial class HsConName : HsCName
 {
   public HsName Name { get; set; }
 
