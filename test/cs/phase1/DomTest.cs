@@ -38,7 +38,7 @@ public class DomTests
     var loader = new DOMLoader();
     var module = loader.load(dataStream1);
     
-    module.visitDFSEnd(new EchoVisitor());
+    module.visitDFS(new EchoVisitor());
   }
 
   [Test]
@@ -71,7 +71,7 @@ public class DomTests
                   Context = new HsContext {
                     Assertions = new System.Collections.Generic.List<HsAsst>(new [] {
                         new HsAsst {
-                          Name = new UnQual { Name = new HsName { Name = "Nya", }, },
+                          Name = new UnQual { Name = new HsName { Name = "name", }, },
                         }
                       }),
                   },

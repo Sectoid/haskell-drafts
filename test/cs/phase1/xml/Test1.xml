@@ -30,9 +30,7 @@
     </HsTypeSig>
     <HsPatBind>
       <Pattern xsi:type="HsPVar">
-	<Name>
-	  <HsName>main</HsName>
-	</Name>
+	<Name>main</Name>
       </Pattern>
       <Rhs xsi:type="HsUnGuardedRhs">
 	<Expression xsi:type="HsInfixApp">

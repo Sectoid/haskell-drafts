@@ -44,8 +44,8 @@ public class Hsc
     var loader = new DOMLoader();
 
     var module = loader.load(parser.StandardOutput);
-
     Console.WriteLine("Successfully parsed! {0}", module);
+    // loader.save(Console.Out, module);
 
     return 0;
   }

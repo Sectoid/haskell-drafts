@@ -74,6 +74,14 @@ public static class VisitingExtensions
   {
     node.walkDFSEnd(x => x.accept(visitor));
   }
+
+  public static Node findParentOfType<Node>(this IAstNode node)
+    where Node : class
+  {
+    if(node.Parent == null) return null;
+
+    return (node.Parent as Node) ?? node.Parent.findParentOfType<Node>();
+  }
 }
 
 }

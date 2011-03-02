@@ -40,7 +40,11 @@
         <include name="src/cs/phase1/DomLoader.cs" />
         <include name="src/cs/phase1/IVisitor.cs" />
         <include name="src/cs/phase1/BasicVisitors.cs" />
+        <include name="src/cs/phase1/Qualifier.cs" />
       </sources>
+      <references>
+        <include name="bin/Language.Haskell.Phase1.Runtime.dll"/>
+      </references>
     </csc>
   </target>
 
@@ -61,6 +65,8 @@
         <include name="test/cs/phase1/AssemblyInfo.cs" />
         <include name="test/cs/phase1/DomTest.cs" />
         <include name="test/cs/phase1/EchoVisitor.cs" />
+        <include name="test/cs/phase1/QualifierTest.cs" />
+        <include name="test/cs/phase1/HaskellReflectionTest.cs" />
       </sources>
       <resources prefix="Language.Haskell.Phase1.Tests.Data">
 	<include name="test/cs/phase1/xml/Test1.xml" />
@@ -68,6 +74,7 @@
       <references>
         <include name="nunit.framework.dll"/>
         <include name="bin/Language.Haskell.Phase1.dll"/>
+        <include name="bin/Language.Haskell.Phase1.Runtime.dll"/>
       </references>
     </csc>
   </target>

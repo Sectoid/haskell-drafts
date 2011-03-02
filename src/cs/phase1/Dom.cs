@@ -49,6 +49,11 @@ public class HsName : BasicNode
   {
     visitor.visit(this);
   }
+
+  public override string ToString()
+  {
+    return Name;
+  }
 }
 
 public abstract class HsQName : BasicNode {}
