@@ -86,7 +86,7 @@ public class Monad_Maybe : Monad<Maybe>
     if(!(value is Maybe<U>)) global::Prelude.error("");
     if(!(f is Func<U, Maybe<V>>)) global::Prelude.error("");
 
-    return bind((Maybe<U>)value, (Func<U, Maybe<V>>)f); 
+    return bind(value as Maybe<U>, f as Func<U, Maybe<V>>);
   }
 }
 
