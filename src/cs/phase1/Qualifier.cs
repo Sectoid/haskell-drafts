@@ -19,6 +19,16 @@ public class UnableToFindModuleException : LocatedErrorException
   
 }
 
+public enum DeclarationType
+{
+  Nothing,
+  FunctionSet,
+  TypeClass,
+  ADT,
+  Constructor,
+}
+
+
 public static class QualifierExtensions
 {
   public static Type findModule(this Assembly asm, string name)
@@ -37,35 +47,125 @@ public static class QualifierExtensions
     // return null;
   }
 
-  public static IEnumerable<Type> allExports(this Type module)
+  public static IEnumerable<MemberInfo> getMembers(this Type type)
+  {
+    switch(type.classify())
+    {
+      case DeclarationType.TypeClass:
+      case DeclarationType.ADT:
+        yield return type; break;
+      case DeclarationType.FunctionSet:
+        foreach(var fn in type.GetMethods(BindingFlags.Public | BindingFlags.Static))
+          yield return fn;
+        break;
+      default: break;
+    }
+    yield break;
+  }
+
+  public static IEnumerable<MemberInfo> allExports(this Type module)
   {
     // TODO: Assert module is a Module
-    var retVal = module
+    return module
       .GetCustomAttributes(typeof(Runtime.ExportAttribute), false)
       .OfType<Runtime.ExportAttribute>()
-      .Select(x => x.Type);
+      .SelectMany(x => x.Type.getMembers());
 
-    Console.WriteLine("Found {0} exports", retVal.Count());
+    // Console.WriteLine("Found {0} exports", retVal.Count());
 
-    return retVal;
-    // return module
-    //   .GetCustomAttributes(typeof(Runtime.ExportAttribute), false)
-    //   .OfType<Runtime.ExportAttribute>()
-    //   .Select(x => x.Type);
+    // return retVal;
   }
 
-  public static IEnumerable<Type> typeClasses(this IEnumerable<Type> exports)
+  public static string clearName(this string name)
   {
-    return exports.Where(x => x.GetCustomAttributes(typeof(Runtime.TypeClassAttribute), 
-                                                    false).Length != 0);
+    var genericIdx = name.LastIndexOf('`');
+    if(genericIdx != -1)
+      return name.Remove(genericIdx);
+    
+    return name;
   }
 
-  public static IEnumerable<Type> typeConstructors(this IEnumerable<Type> exports)
+  public static HsName haskellName(this Type type)
   {
-    yield break;
-    // return exports.Where(x => x.GetCustomAttributes(typeof(Runtime.TypeClassAttribute), 
-    //                                                 false).Length != 0);
+    var nameAttr = type.GetCustomAttributes(typeof(Runtime.NameAttribute), 
+                                            false);
+    if(nameAttr.Length != 0)
+      return new HsName { Name = (nameAttr[0] as Runtime.NameAttribute).Value, };
+    else
+      return new HsName { Name = type.Name.clearName(), };
   }
+
+  public static HsName haskellName(this MethodInfo method)
+  {
+    var nameAttr = method.GetCustomAttributes(typeof(Runtime.NameAttribute), 
+                                            false);
+    if(nameAttr.Length != 0)
+      return new HsName { Name = (nameAttr[0] as Runtime.NameAttribute).Value, };
+    else
+      return new HsName { Name = method.Name.clearName(), };
+  }
+
+  public static DeclarationType classify(this Type type)
+  {
+    if(type.GetCustomAttributes(typeof(Runtime.TypeClassAttribute),
+                                false).Length != 0)
+    {
+      return DeclarationType.TypeClass;
+    }
+
+    if(type.GetCustomAttributes(typeof(Runtime.FunctionSetAttribute),
+                                false).Length != 0)
+    {
+      return DeclarationType.FunctionSet;
+    }
+
+    if(type.GetCustomAttributes(typeof(Runtime.ConstructorAttribute),
+                                false).Length != 0)
+    {
+      return DeclarationType.ADT;
+    }
+    return DeclarationType.Nothing;
+  }
+
+  public static HsImportSpec toImportSpec(this MemberInfo member)
+  {
+    if(member is Type)
+      return new HsIAbs
+      {
+        Name = (member as Type).haskellName(),
+      };
+    else if(member is MethodInfo)
+      return new HsIVar
+      {
+        Name = (member as MethodInfo).haskellName(),
+      };
+    else throw new Exception("ICE!");
+  }
+
+  // public static IEnumerable<HsImportSpec> toImportSpecs(this Type type)
+  // {
+  //   switch(type.classify())
+  //   {
+  //     case DeclarationType.TypeClass:
+  //     case DeclarationType.ADT:
+  //       yield return new HsIAbs
+  //       {
+  //         Name = type.haskellName(),
+  //       };
+  //       break;
+  //     case DeclarationType.FunctionSet:
+  //       foreach(var fn in type.GetMethods(BindingFlags.Public | BindingFlags.Static))
+  //       {
+  //         yield return new HsIVar
+  //         {
+  //           Name = fn.haskellName(),
+  //         };
+  //       }
+  //       break;
+  //     default: break;
+  //   }
+  //   yield break;
+  // }
 
 }
 
@@ -89,7 +189,7 @@ public class Qualifier : EmptyVisitor
     public T Value { get; set; }
   }
 
-  List<Binding<Type>> nameBindings = new List<Binding<Type>>();
+  List<Binding<MemberInfo>> nameBindings = new List<Binding<MemberInfo>>();
 
   public Qualifier()
   {
@@ -103,12 +203,15 @@ public class Qualifier : EmptyVisitor
 
     if(module == null)
       node.Imports.Add(new HsImportDecl {
+          Parent = node,
           Location = node.Location,
           Module = new DOM.Module {
             Name = "Prelude"
           },
           Specs = new List<HsImportSpec>(),
         });
+
+    node.NameLookup = nameBindings.ToLookup(x => x.Name, x => x.Value);
   }
 
   public override void visit(HsTyCon node)
@@ -121,29 +224,22 @@ public class Qualifier : EmptyVisitor
   public override void visit(HsImportDecl node)
   {
     Console.WriteLine("Importing module: {0}", node.Module.Name);
-    // This code somewhy fails NUnit
+
+    // This code fails NUnit on mono-4.0 target
     node.ModuleDeclaringType = placesToLook
       .Select(x => x.findModule(node.Module.Name))
       .FirstOrDefault(x => x != null);
 
-    // foreach(var asm in placesToLook)
-    // {
-    //   var module = asm.findModule(node.Module.Name);
-    //   if(module != null) 
-    //   {
-    //     node.ModuleDeclaringType = module;
-    //     break;
-    //   }
-    // }
-
     if (node.ModuleDeclaringType == null)
       throw new UnableToFindModuleException(node.Location, node.Module.Name);
     
-    // IEnumerable<Type> importList
     if(node.Specs.Count == 0)
     {
+      node.Specs.AddRange(node.ModuleDeclaringType
+                          .allExports()
+                          .Select(x => x.toImportSpec().reparent(node)));
       // Import everything...
-      
+      //node.Specs.Add()
 
       // var modTypeClasses = node.ModuleDeclaringType
       //   .allExports();
@@ -151,7 +247,35 @@ public class Qualifier : EmptyVisitor
 
       // Console.WriteLine("{0} type classes found", typeClasses.Count());
     }
+    
+    // foreach(var spec in nodeSpecs)
+    //   spec.accept(this);
   }
+  
+  public override void visit(HsIVar node)
+  {
+    var importingModule = node.findParentOfType<HsImportDecl>();
+    // importingModule.ModuleDeclaringType.funtion
+    // nameBindings.Add(new Binding<MemberInfo>
+    //                  {
+                       
+    //                  });
+    Console.WriteLine("Importing function {0} from module {1}", node.Name, importingModule.Module.Name);
+  }
+
+  public override void visit(HsIAbs node)
+  {
+    var importingModule = node.findParentOfType<HsImportDecl>();
+    
+    // nameBindings.Add(importingModule.createBinding(m => {
+    //       var exported = m.ModuleDeclaringType.allExports().Where(x => x.classify() in { ... , ..., ... }); 
+    //       .Where(x => x.
+    //       return null;
+    //     });
+
+    Console.WriteLine("Importing {0} from module {1}", node.Name, importingModule.Module.Name);
+  }
+
   // public override void visit(UnQual node)
   // {
   //   Console.WriteLine("Found unqualified node. Name => {0}", node.Name.Name);

@@ -10,6 +10,7 @@ using HsRuntime = Language.Haskell.Phase1.Runtime;
 [HsRuntime.Export(typeof(HsRuntime.Prelude.List<>))]
 [HsRuntime.Export(typeof(HsRuntime.Prelude.Monad_Maybe))]
 [HsRuntime.Export(typeof(HsRuntime.Prelude.Eq_List<>))]
+[HsRuntime.Export(typeof(HsRuntime.Prelude.A))]
 public class Prelude : HsRuntime.Module
 {
   public static void error(String message)
@@ -125,8 +126,9 @@ public class Eq_List<T> : Eq<List<T>>
   }
 }
 
-// public static class A
-// {
+[FunctionSet]
+public static class A
+{
 //   public static String f<T>(Monad<T> instance, T value)
 //   {
 //     var t = instance.@return(value);
@@ -144,11 +146,11 @@ public class Eq_List<T> : Eq<List<T>>
 //     return g(1);
 //   }
 
-//   public static List<T> sort<Context, T>(Ord<T> instance, List<T> value)
-//   {
-//     return value;
-//   }
-// }
+  public static List<T> sort<Context, T>(Ord<T> instance, List<T> value)
+  {
+    return value;
+  }
+}
 
 }
 

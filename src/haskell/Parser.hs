@@ -16,4 +16,5 @@ main :: IO ()
 main = do
   args     <- getArgs
   contents <- readFile (head args)
-  putStrLn $ (serialize . stripResult . parseModule) contents
+  -- putStrLn $ (serialize . stripResult . parseModule) contents
+  putStrLn $ (show . stripResult . parseModule) contents

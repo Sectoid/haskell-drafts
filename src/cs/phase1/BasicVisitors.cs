@@ -96,10 +96,23 @@ public static class VisitingExtensions
     return (node.Parent as Node) ?? node.Parent.findParentOfType<Node>();
   }
 
+  public static Node reparent<Node>(this Node node, IAstNode parent)
+    where Node : IAstNode
+  {
+    node.Parent = parent;
+    return node;
+  }
+
+  // public static IEnumerable<IAstNode> reparent(this IEnumerable<IAstNode> nodes, IAstNode parent)
+  // {
+  //   return nodes.Select(x => x.reparent(parent));
+  // }
+
   public static HsModule module(this IAstNode node)
   {
     return node.findParentOfType<HsModule>();
   }
+
 }
 
 }

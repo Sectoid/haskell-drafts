@@ -26,12 +26,15 @@ public class ExportAttribute : Attribute
 }
 
 
-[AttributeUsage(AttributeTargets.Method, 
+[AttributeUsage(AttributeTargets.Method
+                | AttributeTargets.Class 
+                | AttributeTargets.Interface, 
                 Inherited = false,
                 AllowMultiple = false)]
 public class NameAttribute : Attribute 
 {
-  public NameAttribute(string name) {}
+  public string Value;
+  public NameAttribute(string name) { Value = name; }
 }
 
 [AttributeUsage(AttributeTargets.Class, 
@@ -48,6 +51,11 @@ public class ADTCtorAttribute : Attribute {}
                 Inherited = false,
                 AllowMultiple = false)]
 public sealed class TypeClassAttribute : Attribute {}
+
+[AttributeUsage(AttributeTargets.Class,
+                Inherited = false,
+                AllowMultiple = false)]
+public sealed class FunctionSetAttribute : Attribute {}
 
 [AttributeUsage(AttributeTargets.Class, 
                 Inherited = false,
