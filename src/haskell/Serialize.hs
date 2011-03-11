@@ -14,6 +14,8 @@ class Serializable a where
 instance Serializable HsModule     where serialize = serializeHsModule
 instance Serializable SrcLoc       where serialize = serializeSrcLoc
 instance Serializable Module       where serialize = serializeMod
+instance Serializable HsImportDecl where serialize = serializeHsImportDecl
+instance Serializable HsImportSpec where serialize = serializeHsImportSpec
 instance Serializable HsDecl       where serialize = serializeHsDecl
 instance Serializable HsPat        where serialize = serializeHsPat
                                          con       = showHsPat
@@ -38,12 +40,13 @@ makeNode :: (Serializable a) => String -> a -> String
 makeNode name value = xmlNode name (serialize value) [xsiType $ con value]
 
 serializeHsModule :: HsModule -> String
-serializeHsModule (HsModule srcLoc mod _ _ decl) =
+serializeHsModule (HsModule srcLoc mod _ imports decl) =
     xmlNode "HsModule" 
                 (
-                 xmlNode "Location" (serialize srcLoc)   noAttr ++
-                 xmlNode "Module"   (serialize mod)      noAttr ++
-                 xmlNode "Body"     (decl >>= serialize) noAttr
+                 xmlNode "Location" (serialize srcLoc)      noAttr ++
+                 xmlNode "Module"   (serialize mod)         noAttr ++
+                 xmlNode "Imports"  (serialize =<< imports) noAttr ++
+                 xmlNode "Body"     (serialize =<< decl)    noAttr
                 ) 
                 [
                  ("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance"),
@@ -60,6 +63,28 @@ serializeSrcLoc (SrcLoc _ line column) =
 
 serializeMod :: Module -> String
 serializeMod (Module mod) = mod
+
+serializeHsImportDecl :: HsImportDecl -> String
+serializeHsImportDecl (HsImportDecl srcLoc mod qual as specs) = 
+    xmlNode "HsImportDecl" 
+                (
+                 xmlNode "Module"    (serialize mod) noAttr ++
+                 xmlNode "Qualified" (show qual)     noAttr ++
+                 stripAs as ++
+                 stripSpecs specs
+                ) noAttr 
+        where 
+          stripAs (Just as)              = 
+              xmlNode "As" (serialize as) noAttr
+          stripAs Nothing                = noValue
+          stripSpecs (Just (bool, list)) = 
+              xmlNode "SpecsExcluded" (show bool)          noAttr ++
+              xmlNode "Specs"         (serialize =<< list) noAttr
+          stripSpecs Nothing             = noValue
+
+serializeHsImportSpec :: HsImportSpec -> String
+serializeHsImportSpec = undefined
+
 
 serializeHsDecl :: HsDecl -> String
 serializeHsDecl (HsTypeDecl srcLoc hsName hsNameList hsType) = 
