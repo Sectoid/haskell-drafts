@@ -83,7 +83,14 @@ serializeHsImportDecl (HsImportDecl srcLoc mod qual as specs) =
           stripSpecs Nothing             = noValue
 
 serializeHsImportSpec :: HsImportSpec -> String
-serializeHsImportSpec = undefined
+serializeHsImportSpec (HsIVar name) = 
+    xmlNode "HsIVar" (serialize name) noAttr
+serializeHsImportSpec (HsIAbs name) =
+    xmlNode "HsIAbs" (serialize name) noAttr
+serializeHsImportSpec (HsIThingAll name) =
+    xmlNode "HsIThingAll" (serialize name) noAttr
+serializeHsImportSpec (HsIThingWith name _) =
+    xmlNode "HsIThingWith" (serialize name) noAttr
 
 
 serializeHsDecl :: HsDecl -> String

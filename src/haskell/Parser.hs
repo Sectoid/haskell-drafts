@@ -12,8 +12,13 @@ import Serialize
 
 data ShowBox = forall s. Show s => SB s
 
+
 instance Show ShowBox where
     show (SB s) = show s
+
+a, b :: Int
+a = 1
+b = 2
  
 heteroList :: [ShowBox]
 heteroList = [SB (), SB 5, SB True]
